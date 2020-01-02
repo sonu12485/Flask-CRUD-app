@@ -28,10 +28,10 @@ class Todo(db.Model):
 @app.route("/", methods=["GET"])
 def indexRoute():
     tasks = Todo.query.order_by(Todo.created_at).all()
-    # return render_template("index.html", tasks=tasks)
+    return render_template("index.html", tasks=tasks)
 
-    tasksJson = [task.cast() for task in tasks]
-    return jsonify(tasksJson)
+    # tasksJson = [task.cast() for task in tasks]
+    # return jsonify(tasksJson)
 
 
 @app.route("/add", methods=["POST"])
