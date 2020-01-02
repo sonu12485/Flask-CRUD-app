@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -17,11 +17,21 @@ class Todo(db.Model):
     def __repr__(self):
         return f"Todo - {self.id}"
 
+    def cast(self):
+        return {
+            'id': self.id,
+            'content': self.content,
+            'created_at': self.created_at
+        }
+
 
 @app.route("/", methods=["GET"])
 def indexRoute():
     tasks = Todo.query.order_by(Todo.created_at).all()
-    return render_template("index.html", tasks=tasks)
+    # return render_template("index.html", tasks=tasks)
+
+    tasksJson = [task.cast() for task in tasks]
+    return jsonify(tasksJson)
 
 
 @app.route("/add", methods=["POST"])
